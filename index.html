@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safe Journey, Monika! 🕊️✨</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Noto+Serif+Devanagari:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Tone.js for soft acoustic music -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      background: radial-gradient(circle at 50% 20%, #3f0f15 0%, #25060a 55%, #150204 100%);
+      color: #f7ebe1;
+      min-height: 100vh;
+    }
+
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-serif-vintage { font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif; }
+    .font-hindi { font-family: 'Noto Serif Devanagari', Georgia, serif; }
+    .font-handwriting { font-family: 'Caveat', cursive; }
+
+    /* Editorial Sketch Card Frame */
+    .editorial-parchment-card {
+      background: #fcf8f2;
+      background-image: 
+        radial-gradient(#eedbc6 0.75px, transparent 0.75px),
+        linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(246,238,228,0.95));
+      background-size: 18px 18px, 100% 100%;
+      border: 1px solid #d4c0ab;
+      box-shadow: 
+        0 20px 45px -10px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        inset 0 0 40px rgba(199, 172, 147, 0.15);
+    }
+
+    /* Ambient floating glowing embers/sparks */
+    .floating-sparkle {
+      position: absolute;
+      pointer-events: none;
+      animation: floatUp 9s linear infinite;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(105vh) scale(0.6) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.6; }
+      80% { opacity: 0.6; }
+      100% { transform: translateY(-10vh) scale(1.1) rotate(180deg); opacity: 0; }
+    }
+
+    /* Sketch Hatching Texture Overlay */
+    .sketch-border {
+      border: 1px dashed #bba38a;
+    }
+
+    /* Custom Scrollbar */
+    .custom-scroll::-webkit-scrollbar { width: 5px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #efe4d5; border-radius: 9999px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #bba084; border-radius: 9999px; }
+
+    /* Road Strip Animation */
+    @keyframes roadMove {
+      from { stroke-dashoffset: 40; }
+      to { stroke-dashoffset: 0; }
+    }
+    .road-line {
+      stroke-dasharray: 12 12;
+      animation: roadMove 0.8s linear infinite;
+    }
+
+    /* Smooth Slide Animations */
+    .fade-in {
+      animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative overflow-x-hidden selection:bg-[#7a1c27] selection:text-white">
+
+  <!-- Ambient Golden Floating Embers -->
+  <div id="ambient-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+  <!-- Header Controls Bar -->
+  <header class="w-full max-w-5xl mx-auto px-4 pt-4 sm:pt-6 pb-2 flex justify-between items-center z-20">
+    <div class="flex items-center space-x-2 bg-[#2b080c]/80 backdrop-blur-md px-4 py-1.5 rounded-full border border-[#6b252f] shadow-lg">
+      <span class="inline-block w-2 h-2 rounded-full bg-[#f39c12] animate-pulse"></span>
+      <span id="page-counter-badge" class="text-xs font-semibold text-[#f5d0a9] tracking-widest uppercase font-cinzel">Stage 1 of 3 • Journey Care</span>
+    </div>
+
+    <!-- Morning Vibe Acoustic Music Button -->
+    <button id="music-btn" onclick="toggleBgm()" class="flex items-center space-x-2 bg-[#2b080c]/80 hover:bg-[#3d0f15] backdrop-blur-md px-4 py-1.5 rounded-full border border-[#6b252f] text-xs font-medium text-[#ffd7ba] shadow-lg transition transform hover:scale-105 active:scale-95">
+      <span id="music-icon">📻</span>
+      <span id="music-label">Morning Melody (Play)</span>
+    </button>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 flex items-center justify-center p-3 sm:p-5 relative z-10 w-full max-w-5xl mx-auto">
+
+    <!-- ================= PAGE 1: Morning Bus Care ================= -->
+    <section id="page-1" class="w-full max-w-xl flex flex-col items-center text-center fade-in">
+      <div class="editorial-parchment-card rounded-3xl p-6 sm:p-9 w-full text-[#36271e] relative shadow-2xl">
+        
+        <!-- Red Vintage Wax Stamp on Top Right -->
+        <div class="absolute -top-3.5 right-6 bg-[#63121b] text-[#fbeee0] text-[10px] font-cinzel tracking-widest uppercase px-3.5 py-1 rounded-full border border-[#9b2a38] shadow-md">
+          Morning Departure 🕊️
+        </div>
+
+        <!-- Animated Bus & Morning Sunrise Illustration -->
+        <div class="w-full h-44 mx-auto relative flex items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-b from-[#faede1] via-[#f7ebd9] to-[#ebdcc8] border border-[#d6beaa] p-2 mt-2 shadow-inner">
+          <!-- Warm Morning Sun -->
+          <div class="absolute top-2 right-8 w-16 h-16 rounded-full bg-gradient-to-tr from-[#f39c12]/40 to-[#f1c40f]/20 blur-sm"></div>
+          <div class="absolute top-4 left-6 text-xl opacity-60">☁️</div>
+          <div class="absolute top-8 right-24 text-sm opacity-40">☁️</div>
+
+          <!-- Animated Bus -->
+          <div class="relative z-10 transform -translate-y-1">
+            <svg width="190" height="98" viewBox="0 0 190 98" class="drop-shadow-md">
+              <!-- Bus Body (Deep Crimson vintage look) -->
+              <rect x="15" y="15" width="155" height="56" rx="14" fill="#69151e" stroke="#3d0a0f" stroke-width="2"/>
+              <!-- Lower Crimson Band -->
+              <path d="M 15 50 L 170 50 L 170 60 A 11 11 0 0 1 159 71 L 26 71 A 11 11 0 0 1 15 60 Z" fill="#4d0e15" />
+              <!-- Windows -->
+              <rect x="25" y="23" width="26" height="21" rx="5" fill="#fdfaf4" stroke="#87353f" stroke-width="1.5" />
+              <rect x="58" y="23" width="26" height="21" rx="5" fill="#fdfaf4" stroke="#87353f" stroke-width="1.5" />
+              <rect x="91" y="23" width="26" height="21" rx="5" fill="#fdfaf4" stroke="#87353f" stroke-width="1.5" />
+              <rect x="124" y="23" width="37" height="21" rx="5" fill="#f8eedf" stroke="#87353f" stroke-width="1.5" />
+              
+              <!-- Sweet Passenger (Monika) in Window 1 -->
+              <circle cx="38" cy="33" r="7" fill="#c49a75" />
+              <!-- Little Cute Bun Hair -->
+              <circle cx="38" cy="25" r="4" fill="#301f17" />
+              <circle cx="34" cy="33" r="2" fill="#20130d" />
+              <circle cx="41" cy="33" r="2" fill="#20130d" />
+              <!-- Red Bindi -->
+              <circle cx="38" cy="30" r="1" fill="#c0392b" />
+
+              <!-- Front Headlight Glow -->
+              <circle cx="166" cy="55" r="5" fill="#fef08a" />
+              <!-- Wheels -->
+              <circle cx="50" cy="73" r="12" fill="#241712" />
+              <circle cx="50" cy="73" r="5" fill="#e5d2bc" />
+              <circle cx="138" cy="73" r="12" fill="#241712" />
+              <circle cx="138" cy="73" r="5" fill="#e5d2bc" />
+              <!-- Calligraphy Side Tag -->
+              <text x="95" y="63" font-size="9" fill="#f9ece0" font-family="'Caveat', cursive">Monika's Bus Journey ✨</text>
+            </svg>
+          </div>
+
+          <!-- Road Strip -->
+          <div class="absolute bottom-2.5 w-full px-5">
+            <svg width="100%" height="8">
+              <line x1="0" y1="4" x2="100%" y2="4" stroke="#b49980" stroke-width="3" stroke-linecap="round" class="road-line" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Welcoming Greeting Header -->
+        <h1 class="text-2xl sm:text-3xl font-bold text-[#5c131a] mt-5 font-serif-vintage tracking-tight">
+          Haa ji Aslamwalikum! 🕊️
+        </h1>
+        <p class="text-base sm:text-lg font-medium text-[#4a3427] mt-1 font-serif-vintage italic">
+          Bus mai baith gaye aaram se?
+        </p>
+
+        <!-- Care Reminder Box -->
+        <div class="bg-[#f7efe3] border border-[#d6beaa] rounded-2xl p-4 sm:p-5 mt-5 text-left flex items-start gap-4 shadow-sm">
+          <div class="w-12 h-12 flex-shrink-0 mt-0.5 rounded-full bg-[#faede0] border border-[#caa88d] flex items-center justify-center text-2xl shadow-inner">
+            😴
+          </div>
+
+          <div class="text-xs sm:text-sm text-[#463327] space-y-2 leading-relaxed font-hindi">
+            <p>
+              Haa Jiii, Bus mai beth gye ho to <strong>abhi Breakfast wali tablet le lena 💊</strong>, Or phir nasta krne ke baad bhi।
+            </p>
+            <p class="text-[#6d513e]">
+              Raat mai ache se soyi nhi hogi packing ke karan, To ab window ke pass pillow lga kar <strong> ache se so jana...</strong> Okay? 🌸☕
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive Pill Check Button -->
+        <div class="mt-4">
+          <button id="pill-btn" onclick="checkPillTaken()" class="w-full bg-[#f1e5d4] hover:bg-[#ebdcc8] border border-[#cca98e] text-[#553b2c] text-xs sm:text-sm font-medium py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-xs">
+            <span id="pill-icon">💊</span>
+            <span id="pill-text">If you have taken the medicine, click here!</span>
+          </button>
+        </div>
+
+        <!-- Next Page Button -->
+        <div class="mt-7 flex justify-center">
+          <button onclick="goToPage(2)" class="group inline-flex items-center gap-3 bg-[#69141d] hover:bg-[#520d14] text-[#fff5ea] font-medium px-8 py-3.5 rounded-full shadow-lg shadow-[#3b0b10]/40 hover:scale-[1.02] active:scale-95 transition duration-300 font-cinzel">
+            <span>Aage Dekho... (Editorial Poetry)</span>
+            <span class="group-hover:translate-x-1 transition-transform">→</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PAGE 2: Editorial Sketch Poetry Book (Carousel) ================= -->
+    <section id="page-2" class="w-full max-w-2xl flex flex-col items-center hidden">
+      
+      <!-- Top Mesmerised Banner -->
+      <div class="text-center mb-4 px-2">
+        <div class="inline-flex items-center gap-2 bg-[#2d070b]/90 border border-[#7d202b] px-4 py-1.5 rounded-full text-xs font-semibold text-[#f8d7b8] mb-2 font-cinzel tracking-wider shadow-md">
+          <span>🧿 Nazar na Lage</span>
+          <span>•</span>
+          <span>Thu thu! 🙈✨</span>
+        </div>
+        <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-[#ffd8b8] font-serif-vintage tracking-tight drop-shadow">
+          "Kal tumhari photos dekh kr "Fan" ho gya ma'am mai apka."
+        </h2>
+      </div>
+
+      <!-- Single Editorial Card (Matching User's Reference Layout) -->
+      <div class="editorial-parchment-card rounded-2xl w-full p-5 sm:p-8 text-[#261711] relative shadow-2xl transition-all duration-300 min-h-[440px] flex flex-col justify-between">
+        
+        <!-- Top Editorial Header within the Card -->
+        <div class="flex justify-between items-center border-b border-[#ddccba] pb-3 mb-3">
+          <div class="flex items-center space-x-2">
+            <span class="font-cinzel text-xs font-bold text-[#6d131c] tracking-widest uppercase">LITERARY ESCAPE</span>
+            <span class="text-[#c7af97]">•</span>
+            <span id="poem-category" class="font-hindi text-xs font-semibold text-[#8a5739]">#ख़्वाब-ए-नूर</span>
+          </div>
+          <!-- Number Counter Badge -->
+          <div class="bg-[#efe1cf] border border-[#cfb69b] px-3 py-0.5 rounded-full text-xs font-bold font-cinzel text-[#59151c]">
+            <span id="poem-index">1</span> / 14
+          </div>
+        </div>
+
+        <!-- Middle Body: Split into Editorial Text & Sketch Artwork -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center flex-1 my-2">
+          
+          <!-- Left: Poetry Text (Hindi) -->
+          <div class="md:col-span-7 flex flex-col justify-center text-left pr-1 sm:pr-3">
+            <div class="text-[11px] font-cinzel uppercase tracking-widest text-[#8a5c3e] mb-1">Poem of the Heart</div>
+            <h3 id="poem-title" class="font-serif-vintage text-xl sm:text-2xl font-bold text-[#5c1118] mb-3 leading-snug">
+              AN ESCAPE INTO THE SPACE OF WORDS
+            </h3>
+            
+            <div class="p-3.5 bg-[#f5ede1] rounded-xl border border-[#ded0bf] shadow-inner mb-3">
+              <p id="poem-text" class="font-hindi text-base sm:text-lg text-[#261811] leading-relaxed whitespace-pre-line">
+                <!-- Injected via JS -->
+              </p>
+            </div>
+
+            <!-- Subtitle/Thought Tag -->
+            <div class="flex items-center gap-2 text-xs text-[#7d5e46] font-hindi">
+              <span>💭</span>
+              <span id="poem-footnote">चेहरे का वो नूर, जो कभी भुलाया नहीं जा सकता...</span>
+            </div>
+          </div>
+
+          <!-- Right: Sepia Ink Sketch Illustration (Dynamic SVG per poem) -->
+          <div class="md:col-span-5 flex flex-col items-center justify-center p-2">
+            <div id="sketch-container" class="w-48 h-48 sm:w-56 sm:h-56 rounded-xl border-2 border-[#d9c4ad] bg-[#faf5ee] p-2 flex items-center justify-center shadow-md relative overflow-hidden">
+              <!-- SVG Drawing dynamically injected -->
+            </div>
+            <span class="text-[10px] uppercase font-cinzel text-[#8f6d52] tracking-widest mt-2">Original Ink & Charcoal Sketch</span>
+          </div>
+
+        </div>
+
+        <!-- Bottom Carousel Arrow Navigation -->
+        <div class="pt-4 border-t border-[#ddccba] flex items-center justify-between mt-2">
+          <!-- Prev Button -->
+          <button id="prev-btn" onclick="prevPoem()" class="flex items-center gap-2 px-4 py-2 rounded-full border border-[#c4ab91] bg-[#efe3d3] hover:bg-[#e6d6c1] text-[#422d20] text-xs font-semibold transition active:scale-95 disabled:opacity-30 disabled:pointer-events-none">
+            <span>←</span>
+            <span>Previous poetry</span>
+          </button>
+
+          <!-- Middle Progress Dots -->
+          <div id="dots-container" class="hidden sm:flex items-center space-x-1.5">
+            <!-- Injected by JS -->
+          </div>
+
+          <!-- Next Button -->
+          <button id="next-btn" onclick="nextPoem()" class="flex items-center gap-2 px-5 py-2 rounded-full bg-[#69141d] hover:bg-[#520d14] text-[#fff7ee] text-xs font-semibold shadow-md transition active:scale-95">
+            <span>Next poetry</span>
+            <span>→</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Action Button: Open Final Letter -->
+      <div class="mt-5 w-full flex justify-between items-center px-1">
+        <button onclick="goToPage(1)" class="text-xs text-[#d69f7e] hover:text-[#ffd6ba] underline font-cinzel">
+          ← Back to Bus Care
+        </button>
+
+        <button onclick="goToPage(3)" class="inline-flex items-center gap-2 bg-[#f4ece1] hover:bg-[#ffffff] text-[#550f16] text-xs sm:text-sm font-bold px-6 py-2.5 rounded-full shadow-lg hover:scale-105 active:scale-95 transition font-serif-vintage border border-[#cca98e]">
+          <span>Open Monika's Final Letter 💌</span>
+          <span>→</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ================= PAGE 3: The Letter & Sleeping Teddy ================= -->
+    <section id="page-3" class="w-full max-w-xl flex flex-col items-center text-center hidden">
+      
+      <!-- Envelope View (Before opening) -->
+      <div id="envelope-container" class="w-full flex flex-col items-center fade-in">
+        <span class="text-xs font-semibold uppercase tracking-widest text-[#f5cca4] bg-[#3a0a10] border border-[#7a202c] px-4 py-1.5 rounded-full mb-3 font-cinzel">
+          Private Travel Dispatch 📮
+        </span>
+        <p class="text-[#ffd3b0] font-serif-vintage text-2xl font-bold mb-4 drop-shadow">
+          Tap the red wax seal to unfold your letter! 💌
+        </p>
+
+        <!-- Red Wax Sealed Envelope -->
+        <div onclick="openLetter()" class="cursor-pointer group relative w-72 sm:w-80 h-48 bg-[#ebdccb] rounded-2xl shadow-2xl border-2 border-[#caa88d] flex items-center justify-center transition transform group-hover:scale-105 active:scale-95">
+          <div class="absolute inset-0 bg-[#ebdccb] rounded-xl overflow-hidden">
+            <div class="absolute top-0 left-0 w-0 h-0 border-l-[140px] sm:border-l-[160px] border-l-[#dbc4ad] border-t-[90px] border-t-transparent border-b-[95px] border-b-[#dbc4ad]"></div>
+            <div class="absolute top-0 right-0 w-0 h-0 border-r-[140px] sm:border-r-[160px] border-r-[#dbc4ad] border-t-[90px] border-t-transparent border-b-[95px] border-b-[#dbc4ad]"></div>
+          </div>
+
+          <!-- Peeking Paper -->
+          <div class="absolute -top-3 w-56 h-18 bg-[#fdfbf7] rounded-t-lg shadow-sm border border-[#ceb49b] flex flex-col items-center pt-2">
+            <span class="text-[11px] font-serif-vintage text-[#5c131a] font-bold">For Monika's bus journey ✨</span>
+            <div class="w-36 h-1 bg-[#e7d4c1] rounded mt-1"></div>
+            <div class="w-24 h-1 bg-[#e7d4c1] rounded mt-1"></div>
+          </div>
+
+          <!-- Wax Seal -->
+          <div class="z-20 w-16 h-16 rounded-full bg-gradient-to-tr from-[#691119] to-[#962330] shadow-xl flex items-center justify-center border-2 border-[#f7e3d2] animate-pulse group-hover:scale-110 transition duration-300">
+            <span class="text-2xl">🕊️</span>
+          </div>
+
+          <div class="absolute bottom-2 text-xs font-semibold text-[#663821] font-serif-vintage">
+            Click wax seal to read ✨
+          </div>
+        </div>
+
+        <button onclick="goToPage(2)" class="mt-6 text-xs text-[#e4b292] hover:text-white underline font-cinzel">
+          ← Return to Poetry Carousel
+        </button>
+      </div>
+
+      <!-- The Letter Card (Typewriter Effect) -->
+      <div id="letter-card" class="hidden w-full editorial-parchment-card rounded-3xl p-5 sm:p-8 shadow-2xl relative text-left transition-all duration-700 scale-95 opacity-0">
+        
+        <!-- Postcard Header -->
+        <div class="flex justify-between items-start border-b border-[#dccebc] pb-3 mb-3">
+          <div>
+            <span class="text-[10px] uppercase tracking-widest font-semibold text-[#8e5c3e] font-cinzel">Special Travel Letter</span>
+            <h3 class="text-2xl sm:text-3xl font-serif-vintage font-bold text-[#5c131a] leading-tight">Dear Monika,</h3>
+          </div>
+          <div class="border border-dashed border-[#a3795b] rounded p-1.5 bg-[#f6eee2] text-center flex flex-col items-center">
+            <span class="text-sm">🚌</span>
+            <span class="text-[8px] font-bold text-[#5c131a] tracking-wider uppercase font-cinzel">Express</span>
+          </div>
+        </div>
+
+        <!-- Skip Typing Option -->
+        <div class="flex justify-end mb-2">
+          <button id="skip-typing-btn" onclick="skipTyping()" class="text-xs text-[#82212b] hover:text-[#520d14] underline font-medium cursor-pointer font-serif-vintage">
+            Read instantly (Skip typing) ⚡
+          </button>
+        </div>
+
+        <!-- Typewriter Container -->
+        <div id="typewriter-box" class="font-handwriting text-[#2e1d15] text-lg sm:text-xl leading-relaxed max-h-[50vh] overflow-y-auto custom-scroll pr-2 whitespace-pre-wrap select-text"></div>
+
+        <!-- ================= Sleeping Teddy Finale (Appears when letter ends) ================= -->
+        <div id="teddy-sleeping-container" class="hidden mt-6 pt-5 border-t border-[#dccebc] flex-col items-center text-center">
+          
+          <div class="inline-flex items-center gap-2 bg-[#f4ebe0] border border-[#d2b89f] px-3.5 py-1 rounded-full text-xs font-semibold text-[#661b24] mb-3 font-cinzel">
+            <span>🌙 Safe Travels Monika</span>
+            <span>•</span>
+            <span>Sleep Tight</span>
+          </div>
+
+          <h4 class="text-xl sm:text-2xl font-serif-vintage font-bold text-[#571017]">
+            Now close your eyes and sleep well... 💤
+          </h4>
+          <p class="text-xs sm:text-sm text-[#5d4435] font-hindi mt-1 mb-4">
+            पैकिंग की थकान मिटा लो, कंबल ओढ़ लो और मीठे ख़्वाब देखो! 🧸✨
+          </p>
+
+          <!-- SVG: Cute Teddy Tucked in Blanket Sleeping with Zzz -->
+          <div class="relative w-56 h-44 mx-auto flex items-center justify-center bg-[#f7efe4] rounded-2xl border border-[#d6beaa] p-3 shadow-inner overflow-hidden">
+            <!-- Moon & Stars in Window -->
+            <div class="absolute top-2 right-4 text-sm opacity-70">⭐</div>
+            <div class="absolute top-5 right-10 text-xs opacity-50">✨</div>
+            <div class="absolute top-2 left-4 text-lg opacity-80">🌙</div>
+
+            <!-- Sleeping Teddy -->
+            <svg width="180" height="130" viewBox="0 0 180 130" class="drop-shadow">
+              <!-- Fluffy Pillow -->
+              <rect x="25" y="35" width="130" height="40" rx="18" fill="#ffffff" stroke="#dbc3ac" stroke-width="2"/>
+              <line x1="38" y1="55" x2="142" y2="55" stroke="#f0e2d3" stroke-width="2" stroke-linecap="round"/>
+
+              <!-- Teddy Bear Ears -->
+              <circle cx="62" cy="40" r="13" fill="#a47551" />
+              <circle cx="62" cy="40" r="7" fill="#d9ad8b" />
+              <circle cx="118" cy="40" r="13" fill="#a47551" />
+              <circle cx="118" cy="40" r="7" fill="#d9ad8b" />
+
+              <!-- Teddy Head -->
+              <circle cx="90" cy="52" r="30" fill="#a47551" />
+
+              <!-- Sleeping Cute Closed Eyes (^ ^ or curved slits) -->
+              <path d="M 76 52 Q 81 57 86 52" fill="none" stroke="#3b2316" stroke-width="2.5" stroke-linecap="round" />
+              <path d="M 94 52 Q 99 57 104 52" fill="none" stroke="#3b2316" stroke-width="2.5" stroke-linecap="round" />
+
+              <!-- Teddy Snout & Nose -->
+              <ellipse cx="90" cy="62" rx="12" ry="9" fill="#d9ad8b" />
+              <ellipse cx="90" cy="59" rx="4.5" ry="3.5" fill="#381f14" />
+              <path d="M 90 62.5 L 90 66" stroke="#381f14" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M 87 66 Q 90 68 93 66" fill="none" stroke="#381f14" stroke-width="1.5" />
+
+              <!-- Pink Blushing Cheeks -->
+              <circle cx="73" cy="58" r="4.5" fill="#e57373" opacity="0.4" />
+              <circle cx="107" cy="58" r="4.5" fill="#e57373" opacity="0.4" />
+
+              <!-- Little Sleeping Nightcap -->
+              <path d="M 68 34 Q 90 18 114 34 Z" fill="#69121a" />
+              <circle cx="118" cy="30" r="5" fill="#ffffff" />
+
+              <!-- Cozy Warm Blanket Tucked over Teddy (Deep warm red/crimson patterned quilt) -->
+              <path d="M 20 72 Q 90 65 160 72 L 165 125 L 15 125 Z" fill="#781923" stroke="#480c12" stroke-width="2" />
+              <!-- Blanket Polka dots / stars -->
+              <circle cx="45" cy="90" r="2.5" fill="#e2a665" opacity="0.7"/>
+              <circle cx="85" cy="85" r="2.5" fill="#e2a665" opacity="0.7"/>
+              <circle cx="125" cy="92" r="2.5" fill="#e2a665" opacity="0.7"/>
+              <circle cx="65" cy="110" r="2.5" fill="#e2a665" opacity="0.7"/>
+              <circle cx="105" cy="112" r="2.5" fill="#e2a665" opacity="0.7"/>
+              <circle cx="145" cy="110" r="2.5" fill="#e2a665" opacity="0.7"/>
+
+              <!-- Teddy Paws peaking over blanket -->
+              <circle cx="68" cy="74" r="8" fill="#a47551" stroke="#3e2316" stroke-width="1.5" />
+              <circle cx="112" cy="74" r="8" fill="#a47551" stroke="#3e2316" stroke-width="1.5" />
+            </svg>
+
+            <!-- Animated Floating Z Z Z -->
+            <div class="absolute right-7 top-6 flex flex-col items-center font-bold text-[#69121a]">
+              <span class="animate-bounce text-sm">z</span>
+              <span class="animate-pulse text-xs -mt-1 text-[#8c2a35]">z</span>
+              <span class="text-[10px] -mt-1 text-[#a8525d]">z</span>
+            </div>
+          </div>
+
+          <!-- Bottom Friendly Reactions -->
+          <div class="flex flex-wrap gap-2.5 justify-center w-full mt-4">
+            <button onclick="smileReaction()" class="flex-1 min-w-[140px] bg-[#69141d] hover:bg-[#520d14] text-[#fff7ee] font-medium text-xs sm:text-sm py-2.5 px-4 rounded-full shadow-md transition transform hover:scale-105 active:scale-95 font-serif-vintage">
+              I'm Smiling! 😊✨
+            </button>
+            <button onclick="safeJourneyReaction()" class="flex-1 min-w-[140px] bg-[#efe3d3] hover:bg-[#e4d4c1] border border-[#cfb69b] text-[#422d20] font-medium text-xs sm:text-sm py-2.5 px-4 rounded-full shadow-sm transition transform hover:scale-105 active:scale-95 font-serif-vintage">
+              Good Night Wishes 💤🌾
+            </button>
+          </div>
+
+          <button onclick="goToPage(2)" class="mt-4 text-xs text-[#704d38] hover:text-[#381f13] underline font-cinzel">
+            ← Read Poetry Book Again
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Sweet Footer -->
+  <footer class="w-full text-center py-3 text-xs text-[#e4a88b] z-10 font-cinzel tracking-wider">
+    Safe journey home Monika • Keep that beautiful smile 🕊️✨
+  </footer>
+
+  <!-- ================= Logic, Poetries Dataset, Sketch Generator & Tone.js ================= -->
+  <script>
+    // Complete 14 Poetries Dataset with Title & Visual Metadata
+    const poetries = [
+      {
+        tag: "#ख़्वाब-ए-नूर",
+        title: "A DREAM OF CELESTIAL NOOR",
+        footnote: "चेहरे का वो नूर, जो चाँद सितारों को भी मात दे दे...",
+        hindi: `मैं एक ख़्वाब सजाऊँ नूर का,
+चेहरा उसका चाँद सा,
+आँखों की चमक सितारे जैसी,
+पलकें जैसे काला आसमाँ,
+होंठों की हँसी जैसे कोई टूटता तारा। ✨`,
+        sketchType: "moon_stars"
+      },
+      {
+        tag: "#मुलाक़ात-ए-तस्वीर",
+        title: "CAPTURING THAT SINGLE GLANCE",
+        footnote: "काश हमें भी मुसव्विर की तरह तेरी मूरत बनानी आती...",
+        hindi: `वो एक पल की मुलाक़ात को रोज़ देख पाते हैं,
+काश हमें भी teri तस्वीर बनानी आती। 🖼️`,
+        sketchType: "portrait_sketch"
+      },
+      {
+        tag: "#परछाई",
+        title: "THE SHADOW OF YOUR THOUGHT",
+        footnote: "तेरा एक ख़याल और दिल की ये बेक़रारी...",
+        hindi: `तेरी परछाई बनकर
+तेरे पीछे हर दम चलता रहूँ—
+ये तेरा ख़याल न जाने मुझसे क्या-क्या कराता है। 🕊️`,
+        sketchType: "flowing_silhouette"
+      },
+      {
+        tag: "#भीड़-में-तुम",
+        title: "THE ONLY ONE IN THE CROWD",
+        footnote: "नज़रें वहीं ठहर गईं, जहाँ तुम मौजूद थीं...",
+        hindi: `भीड़ में एक शख़्स ही दिखता रहा,
+वरना नज़रों के सामने दुनिया बहुत थी। 💫`,
+        sketchType: "crowd_gaze"
+      },
+      {
+        tag: "#उस-मुलाक़ात-का-असर",
+        title: "LOST IN THAT UNFORGETTABLE TALK",
+        footnote: "हम तो उस मुलाक़ात से कभी बाहर ही नहीं आ पाए...",
+        hindi: `मैं तेरी बातों की बात कर आया,
+हर एक लफ़्ज़ में तेरा नाम ले आया।
+तुझसे एक मुलाक़ात हुई थी मेरी—
+मैं फिर कभी उस मुलाक़ात से बाहर ही नहीं आया। ☕`,
+        sketchType: "coffee_meeting"
+      },
+      {
+        tag: "#रूह-का-सुकून",
+        title: "SERENITY WITHIN THY EYES",
+        footnote: "तेरी आँखों में जैसे रूह को नई ज़िन्दगी मिल गई...",
+        hindi: `कितना सुकून बसा है
+तेरी इन बातों में… तेरी इन बाँहों में,
+जैसे मेरी रूह को नई ज़िन्दगी मिल गई हो
+तेरी इन दो आँखों में। 🌿`,
+        sketchType: "eyes_gaze"
+      },
+      {
+        tag: "#लहराती-ज़ुल्फ़ें",
+        title: "DROWNED IN THY GENTLE SMILE",
+        footnote: "ज़ुल्फ़ों की वो लहराहट और वो मीठी मुस्कान...",
+        hindi: `मेरे हाल-ए-दिल की दास्ताँ
+ख़ुद-ब-ख़ुद लिख जाती है तेरे इन लहराते ज़ुल्फ़ों से,
+और मेरी हर साँस फ़ना हो जाती है
+तेरी इस मीठी सी मुस्कान में। 🌹`,
+        sketchType: "flowing_hair"
+      },
+      {
+        tag: "#सुलझने-का-मन-नहीं",
+        title: "ENTANGLED IN CONVERSATIONS",
+        footnote: "तेरी बातों की मीठी सी उलझन...",
+        hindi: `मैं तेरी बातों में ऐसा उलझा,
+कि फिर कभी
+सुलझने का मन ही नहीं किया। 🧶`,
+        sketchType: "thread_entangled"
+      },
+      {
+        tag: "#खुले-बाल",
+        title: "THE CHARM OF OPEN TRESSES",
+        footnote: "इरादा तो सिर्फ़ दोस्ती का था, पर उन ज़ुल्फ़ों ने रोक लिया...",
+        hindi: `तेरे खुले बालों को देखकर
+मैं उलझ गया,
+वरना इरादा मेरा भी
+दोस्ती का ही था। 🥀`,
+        sketchType: "open_hair_wind"
+      },
+      {
+        tag: "#तारीफ़-के-शब्द",
+        title: "SPEECHLESS BEFORE BEAUTY",
+        footnote: "शब्द बहुत थे, पर दीदार होते ही सब ग़ायब हो गए...",
+        hindi: `वो तो तेरे चेहरे को देखकर
+देखता ही रह गया,
+वरना तारीफ़ के लिए
+शब्द बहुत लाया था। 📖`,
+        sketchType: "speechless_pen"
+      },
+      {
+        tag: "#माथे-की-बिंदी",
+        title: "THE BINDI UPON HER FOREHEAD",
+        footnote: "पिछली मुलाक़ात में हम उस छोटी सी बिंदी को ही देखते रह गए...",
+        hindi: `कि तुझसे एक मुलाक़ात और करनी है मुझे—
+पिछली वाली में
+मैं तेरे माथे की बिंदी ही
+देखता रह गया। 🔴✨`,
+        sketchType: "bindi_forehead"
+      },
+      {
+        tag: "#तकते-ही-रह-गए",
+        title: "GAZING AT YOUR GRACE",
+        footnote: "इरादा तो ढेर सारी बातें करने का था...",
+        hindi: `कि मैं तेरे चेहरे को देख कर ही तकता रह गया,
+वरना मैं इरादा तो ढेर सारी बातें करने का लाया था। ✨`,
+        sketchType: "mirror_gaze"
+      },
+      {
+        tag: "#तेरी-तस्वीर",
+        title: "ADMIRING THE PHOTOGRAPH",
+        footnote: "सबको बताने का इरादा था, पर ख़ुद ही खो गए...",
+        hindi: `तेरी तस्वीर देखकर लगा
+सबको तेरे बारे में बताऊँ,
+पर मैं तेरी तस्वीर ही देखता रह गया। 📸`,
+        sketchType: "camera_photo"
+      },
+      {
+        tag: "#विशेष-नज़्म-चेहरा",
+        title: "THE UNRIVALED RADIANCE",
+        footnote: "किसका देखूँ अब चेहरा मैं... उसके जैसा चेहरा कहीं देखा ही नहीं!",
+        hindi: `क्या उसका चेहरा चेहरा करते हो...?
+
+सितारे देखे, जगमगाती रातें देखीं
+पर उसकी जैसी पलकें कहीं नहीं देखीं
+
+चाँद देखा, आसमाँ देखा
+पर उसके जैसा नूर कहीं नहीं देखा
+
+शाम ढलती देखी, चाँद को निकलते देखा
+पर उसकी जैसी आँखों की चमक कहीं नहीं देखी
+
+सुबह चिड़िया की चहचहाहट देखी, ठंडी हवाओं का शोर देखा
+पर उसके जैसी मुस्कुराहट कहीं नहीं देखी
+
+"किसका देखूँ अब चेहरा मैं,
+उसके जैसा चेहरा मैंने कहीं देखा ही नहीं।" ❤️✨`,
+        sketchType: "grand_crescent"
+      }
+    ];
+
+    let currentPoemIndex = 0;
+
+    // SVG Ink/Sketch Drawings matching the artwork style in user's image
+    const sketchIllustrations = {
+      moon_stars: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%" class="opacity-90">
+          <circle cx="100" cy="100" r="85" fill="none" stroke="#69241b" stroke-width="1.2" stroke-dasharray="3 3"/>
+          <!-- Crescent Moon Hatching -->
+          <path d="M 120 40 A 65 65 0 0 0 120 160 A 50 50 0 0 1 120 40 Z" fill="#2d1711" stroke="#3b2118" stroke-width="1.5"/>
+          <!-- Ink Clouds/Smoke Waves inspired by reference -->
+          <path d="M 30 110 Q 70 85 95 105 T 160 95" fill="none" stroke="#8a5e46" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 40 125 Q 75 100 110 120 T 170 110" fill="none" stroke="#aa795c" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Tiny Stars -->
+          <polygon points="65,55 68,63 76,64 70,70 72,78 65,73 58,78 60,70 54,64 62,63" fill="#8c3328"/>
+          <circle cx="140" cy="70" r="2.5" fill="#5c151c"/>
+          <circle cx="50" cy="145" r="2" fill="#5c151c"/>
+        </svg>`,
+      portrait_sketch: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <!-- Ink Silhouette Face Profile -->
+          <path d="M 60 50 Q 85 45 105 60 T 120 95 Q 125 105 118 112 T 115 125 Q 125 135 110 148 L 90 165" fill="none" stroke="#2a1610" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Serene Closed Eye -->
+          <path d="M 92 88 Q 98 94 104 88" fill="none" stroke="#3d1b14" stroke-width="2" stroke-linecap="round"/>
+          <line x1="94" y1="89" x2="92" y2="93" stroke="#3d1b14" stroke-width="1.2"/>
+          <line x1="98" y1="91" x2="98" y2="95" stroke="#3d1b14" stroke-width="1.2"/>
+          <line x1="102" y1="89" x2="104" y2="93" stroke="#3d1b14" stroke-width="1.2"/>
+          <!-- Freckles/Stippling -->
+          <circle cx="95" cy="100" r="1" fill="#8a4b37"/>
+          <circle cx="99" cy="103" r="1.2" fill="#8a4b37"/>
+          <circle cx="103" cy="99" r="1" fill="#8a4b37"/>
+          <!-- Smoke / Swirling Hair strands like image -->
+          <path d="M 110 65 C 135 50 145 75 165 60 S 180 85 155 105" fill="none" stroke="#68241b" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M 115 80 C 145 75 150 100 170 95 S 165 125 140 130" fill="none" stroke="#944e3d" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>`,
+      flowing_silhouette: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <ellipse cx="100" cy="165" rx="55" ry="12" fill="#e2cdb8"/>
+          <!-- Walking Silhouette & Shadow -->
+          <path d="M 90 160 Q 95 105 100 70 Q 102 55 98 45" stroke="#301811" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <circle cx="98" cy="38" r="9" fill="#301811"/>
+          <!-- Shadow trailing -->
+          <path d="M 95 162 C 120 165 140 170 165 174" stroke="#7a261d" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+          <!-- Whimsical Wind Waves -->
+          <path d="M 40 80 Q 80 60 120 80 T 175 70" fill="none" stroke="#aa7154" stroke-width="1.5" stroke-dasharray="4 2"/>
+        </svg>`,
+      crowd_gaze: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <!-- Blurred Crowd silhouettes -->
+          <circle cx="45" cy="90" r="12" fill="#d2bea9"/>
+          <circle cx="155" cy="95" r="13" fill="#d2bea9"/>
+          <circle cx="65" cy="135" r="14" fill="#cfb69e"/>
+          <circle cx="140" cy="140" r="15" fill="#cfb69e"/>
+          <!-- The One Singular Radiant Subject (Centered) -->
+          <circle cx="100" cy="85" r="19" fill="#5c1219" stroke="#f4ebe1" stroke-width="3"/>
+          <circle cx="100" cy="73" r="4.5" fill="#f4ebe1"/>
+          <path d="M 85 130 Q 100 108 115 130 Z" fill="#5c1219"/>
+          <!-- Radiating Gaze Halo -->
+          <circle cx="100" cy="85" r="32" fill="none" stroke="#b56345" stroke-width="1.5" stroke-dasharray="3 3"/>
+        </svg>`,
+      coffee_meeting: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <rect x="55" y="90" width="90" height="65" rx="14" fill="#faf2e6" stroke="#4a251b" stroke-width="2.5"/>
+          <path d="M 145 105 Q 165 105 165 122 Q 165 138 145 138" fill="none" stroke="#4a251b" stroke-width="3" stroke-linecap="round"/>
+          <ellipse cx="100" cy="90" rx="45" ry="12" fill="#5c171f" stroke="#4a251b" stroke-width="2"/>
+          <ellipse cx="100" cy="158" rx="65" ry="10" fill="#dfccb7" stroke="#4a251b" stroke-width="2"/>
+          <!-- Rising Vapor Waves forming a subtle heart -->
+          <path d="M 85 75 Q 80 50 95 38 Q 100 48 100 58" fill="none" stroke="#8c3328" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 115 75 Q 120 50 105 38 Q 100 48 100 58" fill="none" stroke="#8c3328" stroke-width="2" stroke-linecap="round"/>
+        </svg>`,
+      eyes_gaze: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <!-- Artistic Detailed Eye Contour -->
+          <path d="M 30 100 Q 100 45 170 100 Q 100 155 30 100 Z" fill="#fffcf7" stroke="#2c1610" stroke-width="2.5"/>
+          <!-- Iris with rich brown/amber rings -->
+          <circle cx="100" cy="100" r="28" fill="#521319" stroke="#2c1610" stroke-width="2"/>
+          <circle cx="100" cy="100" r="14" fill="#150805"/>
+          <!-- Glint / Sparkle -->
+          <circle cx="94" cy="94" r="5" fill="#ffffff"/>
+          <circle cx="106" cy="105" r="2.5" fill="#ffffff"/>
+          <!-- Long Eyelashes -->
+          <path d="M 50 80 L 40 65 M 75 62 L 72 45 M 100 58 L 100 40 M 125 62 L 128 45 M 150 80 L 160 65" stroke="#2c1610" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>`,
+      flowing_hair: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <!-- Flowing Waves of Hair and Petals -->
+          <path d="M 50 40 C 90 70 80 120 120 150 S 160 110 170 170" fill="none" stroke="#2a140d" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 65 35 C 105 65 95 115 135 145 S 175 105 180 160" fill="none" stroke="#662118" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 40 55 C 75 80 70 130 105 155 S 145 125 155 175" fill="none" stroke="#8c4731" stroke-width="2" stroke-linecap="round"/>
+          <!-- Falling Rose Petal in Red -->
+          <path d="M 120 80 Q 135 65 145 80 Q 135 95 120 80 Z" fill="#801b25"/>
+          <path d="M 70 120 Q 85 105 95 120 Q 85 135 70 120 Z" fill="#801b25"/>
+        </svg>`,
+      thread_entangled: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <!-- Whimsical Entangled Skein of Yarn / Line -->
+          <path d="M 40 100 C 60 40, 140 40, 160 100 C 180 160, 60 170, 70 90 C 80 20, 160 140, 100 130 C 50 120, 130 70, 100 100" fill="none" stroke="#781d26" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="100" cy="100" r="6" fill="#4d1117"/>
+        </svg>`,
+      open_hair_wind: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <path d="M 60 140 Q 70 70 110 60 Q 150 50 170 80" fill="none" stroke="#2b150e" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 75 150 Q 90 85 125 75 Q 165 65 180 95" fill="none" stroke="#682119" stroke-width="2" stroke-linecap="round"/>
+          <!-- Wind swirl leaves -->
+          <path d="M 30 70 Q 70 60 100 80 T 170 75" fill="none" stroke="#a46d51" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <circle cx="50" cy="70" r="3" fill="#682119"/>
+        </svg>`,
+      speechless_pen: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <!-- Vintage Feather Quill and Inkpot -->
+          <path d="M 60 150 L 95 150 L 90 120 L 65 120 Z" fill="#2d1610" stroke="#1d0d08" stroke-width="2"/>
+          <ellipse cx="77" cy="120" rx="12" ry="4" fill="#69161e"/>
+          <!-- Feather Quill angled into the ink -->
+          <path d="M 77 120 Q 110 80 150 40 C 135 60 120 90 125 110" fill="#fdfaf3" stroke="#2d1610" stroke-width="2"/>
+          <line x1="77" y1="120" x2="150" y2="40" stroke="#78231c" stroke-width="2"/>
+          <!-- Drops of ink -->
+          <circle cx="100" cy="140" r="3" fill="#69161e"/>
+          <circle cx="112" cy="148" r="2" fill="#69161e"/>
+        </svg>`,
+      bindi_forehead: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <!-- Elegant Forehead Arch with delicate Eyebrows -->
+          <path d="M 40 120 Q 70 95 95 115" fill="none" stroke="#2d1711" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 105 115 Q 130 95 160 120" fill="none" stroke="#2d1711" stroke-width="3" stroke-linecap="round"/>
+          <!-- Beautiful Crimson Bindi (Glowing centerpiece) -->
+          <circle cx="100" cy="95" r="9" fill="#991523" stroke="#ffd9b3" stroke-width="2"/>
+          <circle cx="100" cy="95" r="16" fill="none" stroke="#991523" stroke-width="1.2" stroke-dasharray="2 3"/>
+          <!-- Center forehead subtle maang-tikka hint -->
+          <line x1="100" y1="35" x2="100" y2="78" stroke="#aa7a59" stroke-width="1.8" stroke-dasharray="3 2"/>
+        </svg>`,
+      mirror_gaze: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <!-- Vintage Oval Mirror Frame -->
+          <ellipse cx="100" cy="95" rx="55" ry="70" fill="#fcf9f2" stroke="#5a181f" stroke-width="4"/>
+          <ellipse cx="100" cy="95" rx="46" ry="60" fill="none" stroke="#caa286" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <path d="M 85 165 L 115 165 L 105 190 L 95 190 Z" fill="#5a181f"/>
+          <!-- Light Reflection -->
+          <line x1="75" y1="70" x2="85" y2="120" stroke="#f0ddcc" stroke-width="3" stroke-linecap="round"/>
+          <line x1="88" y1="65" x2="95" y2="105" stroke="#f0ddcc" stroke-width="2" stroke-linecap="round"/>
+        </svg>`,
+      camera_photo: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <!-- Polaroid / Photo Frame tilted slightly -->
+          <g transform="rotate(-5 100 100)">
+            <rect x="50" y="40" width="100" height="120" rx="4" fill="#ffffff" stroke="#cbb39d" stroke-width="2"/>
+            <rect x="58" y="48" width="84" height="80" fill="#f7ede1" stroke="#d8c5b2" stroke-width="1"/>
+            <!-- Heart in Photo -->
+            <path d="M 100 88 Q 100 75 90 75 Q 80 75 80 85 Q 80 95 100 108 Q 120 95 120 85 Q 120 75 110 75 Q 100 75 100 88 Z" fill="#7d1b24"/>
+            <line x1="68" y1="145" x2="125" y2="145" stroke="#d5c0ac" stroke-width="2" stroke-linecap="round"/>
+          </g>
+        </svg>`,
+      grand_crescent: `
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <!-- Majestic Moon & Ethereal Radiance -->
+          <circle cx="100" cy="100" r="75" fill="none" stroke="#872933" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <path d="M 100 35 A 65 65 0 0 0 100 165 A 52 52 0 0 1 100 35 Z" fill="#69121a" stroke="#2d080c" stroke-width="2"/>
+          <!-- Golden Glint -->
+          <circle cx="70" cy="100" r="10" fill="#f5c278" opacity="0.8"/>
+          <polygon points="135,70 138,76 145,77 140,82 142,88 135,84 128,88 130,82 125,77 132,76" fill="#992631"/>
+          <polygon points="120,130 122,135 128,136 124,140 125,145 120,142 115,145 116,140 112,136 118,135" fill="#992631"/>
+        </svg>`
+    };
+
+    // Render Current Poem
+    function renderPoem(index) {
+      const p = poetries[index];
+      document.getElementById('poem-index').innerText = (index + 1);
+      document.getElementById('poem-category').innerText = p.tag;
+      document.getElementById('poem-title').innerText = p.title;
+      document.getElementById('poem-text').innerText = p.hindi;
+      document.getElementById('poem-footnote').innerText = p.footnote;
+
+      // Render Sketch
+      const sketchBox = document.getElementById('sketch-container');
+      sketchBox.innerHTML = sketchIllustrations[p.sketchType] || sketchIllustrations.moon_stars;
+
+      // Update Nav Buttons
+      document.getElementById('prev-btn').disabled = (index === 0);
+      const nextBtn = document.getElementById('next-btn');
+      if (index === poetries.length - 1) {
+        nextBtn.innerHTML = `<span>ख़त पढ़ें (Letter) 💌</span><span>→</span>`;
+      } else {
+        nextBtn.innerHTML = `<span> Nexy Poetry </span><span>→</span>`;
+      }
+
+      // Update Dots
+      renderDots(index);
+    }
+
+    function renderDots(activeIndex) {
+      const container = document.getElementById('dots-container');
+      container.innerHTML = '';
+      poetries.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = `w-1.5 h-1.5 rounded-full transition-all duration-200 ${i === activeIndex ? 'w-4 bg-[#69141d]' : 'bg-[#caa88d]'}`;
+        container.appendChild(dot);
+      });
+    }
+
+    function prevPoem() {
+      if (currentPoemIndex > 0) {
+        currentPoemIndex--;
+        playChime('D5');
+        renderPoem(currentPoemIndex);
+      }
+    }
+
+    function nextPoem() {
+      if (currentPoemIndex < poetries.length - 1) {
+        currentPoemIndex++;
+        playChime('F5');
+        renderPoem(currentPoemIndex);
+      } else {
+        // Go to Page 3
+        goToPage(3);
+      }
+    }
+
+    // Ambient floating sparks
+    function createAmbientElements() {
+      const container = document.getElementById('ambient-container');
+      const emojis = ['✨', '🕊️', '🍂', '🌙', '☕', '🤍'];
+      for (let i = 0; i < 16; i++) {
+        const item = document.createElement('div');
+        item.className = 'floating-sparkle';
+        item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        item.style.left = Math.random() * 100 + 'vw';
+        item.style.fontSize = (12 + Math.random() * 14) + 'px';
+        item.style.animationDelay = (Math.random() * 7) + 's';
+        item.style.animationDuration = (7 + Math.random() * 6) + 's';
+        container.appendChild(item);
+      }
+    }
+    createAmbientElements();
+
+    // Subtle Acoustic Chime
+    let synth = null;
+    let isMusicPlaying = false;
+    let bgmLoop = null;
+
+    function playChime(note = 'E5') {
+      try {
+        if (!synth) {
+          synth = new Tone.PolySynth(Tone.FMSynth, {
+            harmonicity: 1.2,
+            modulationIndex: 1.0,
+            envelope: { attack: 0.05, decay: 0.6, sustain: 0.1, release: 1.2 }
+          }).toDestination();
+          synth.volume.value = -12;
+        }
+        Tone.start();
+        synth.triggerAttackRelease(note, '8n');
+      } catch (e) {
+        console.warn('Audio awaiting user interaction');
+      }
+    }
+
+    // Calming Acoustic Morning Vibe Loop
+    function toggleBgm() {
+      const btnLabel = document.getElementById('music-label');
+      const btnIcon = document.getElementById('music-icon');
+
+      if (isMusicPlaying) {
+        if (bgmLoop) bgmLoop.stop();
+        Tone.Transport.stop();
+        isMusicPlaying = false;
+        btnLabel.innerText = 'Morning Melody (Play)';
+        btnIcon.innerText = '📻';
+      } else {
+        Tone.start().then(() => {
+          if (!synth) {
+            synth = new Tone.PolySynth(Tone.FMSynth, {
+              harmonicity: 1.0,
+              modulationIndex: 0.8,
+              oscillator: { type: 'sine' },
+              envelope: { attack: 0.12, decay: 0.8, sustain: 0.3, release: 1.8 }
+            }).toDestination();
+            synth.volume.value = -14;
+          }
+
+          // Warm romantic morning chords
+          const morningChords = [
+            { time: '0:0', notes: ['C4', 'E4', 'G4', 'B4'] },
+            { time: '0:2', notes: ['G4', 'B4', 'D5'] },
+            { time: '1:0', notes: ['A3', 'C4', 'E4', 'G4', 'B4'] },
+            { time: '1:2', notes: ['E4', 'G4', 'C5'] },
+            { time: '2:0', notes: ['F3', 'A3', 'C4', 'E4'] },
+            { time: '2:2', notes: ['C4', 'E4', 'A4'] },
+            { time: '3:0', notes: ['G3', 'C4', 'D4', 'G4'] },
+            { time: '3:2', notes: ['B3', 'D4', 'G4'] }
+          ];
+
+          bgmLoop = new Tone.Part((time, value) => {
+            synth.triggerAttackRelease(value.notes, '2n', time);
+          }, morningChords).start(0);
+
+          bgmLoop.loop = true;
+          bgmLoop.loopEnd = '4m';
+          Tone.Transport.bpm.value = 52;
+          Tone.Transport.start();
+
+          isMusicPlaying = true;
+          btnLabel.innerText = 'Mute Melody';
+          btnIcon.innerText = '🔉';
+        }).catch(err => console.log('BGM Error:', err));
+      }
+    }
+
+    // Pill Button Logic
+    let pillTaken = false;
+    function checkPillTaken() {
+      const btn = document.getElementById('pill-btn');
+      const icon = document.getElementById('pill-icon');
+      const text = document.getElementById('pill-text');
+
+      if (!pillTaken) {
+        pillTaken = true;
+        playChime('G5');
+        icon.innerText = '✅';
+        text.innerText = 'Good girl! Tablet le li. Now sleep peacefully 🤍';
+        btn.classList.remove('bg-[#f1e5d4]', 'text-[#553b2c]');
+        btn.classList.add('bg-[#e5eedc]', 'border-[#adc69b]', 'text-[#2e4d1b]');
+
+        confetti({
+          particleCount: 30,
+          spread: 60,
+          origin: { y: 0.7 },
+          colors: ['#a8323e', '#e5b382', '#f7ede1']
+        });
+      }
+    }
+
+    // Page Navigation
+    function goToPage(pageNumber) {
+      playChime('C5');
+
+      const p1 = document.getElementById('page-1');
+      const p2 = document.getElementById('page-2');
+      const p3 = document.getElementById('page-3');
+      const badge = document.getElementById('page-counter-badge');
+
+      [p1, p2, p3].forEach(p => {
+        p.classList.add('hidden');
+        p.classList.remove('fade-in');
+      });
+
+      if (pageNumber === 1) {
+        p1.classList.remove('hidden');
+        p1.classList.add('fade-in');
+        badge.innerText = 'Stage 1 of 3 • Journey Care';
+      } else if (pageNumber === 2) {
+        p2.classList.remove('hidden');
+        p2.classList.add('fade-in');
+        badge.innerText = 'Stage 2 of 3 • Editorial Poetry 📜';
+        renderPoem(currentPoemIndex);
+      } else if (pageNumber === 3) {
+        p3.classList.remove('hidden');
+        p3.classList.add('fade-in');
+        badge.innerText = 'Stage 3 of 3 • Secret Letter 💌';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // The Letter Text
+    const letterContent = `Dear Monika,
+
+Assalamu Alaikum, Pretty Girl! 🌸❤️
+
+So, here we are again!
+I know you probably weren't expecting another little surprise from me, but honestly, some people deserve more than just a normal good morning text. And well… you're one of them. 😉
+
+First of all, I hope you wake up with a beautiful smile today. Although, knowing you, I think your smile is already pretty enough to make someone's entire day better.
+
+I don't know how to explain it, but yesterday was genuinely so much fun. From our endless conversations and random nonsense to all those silly jokes and laughs… everything felt so effortlessly nice.
+
+And those pictures you shared? Well, I must say, my camera roll isn't the only thing that got prettier yesterday. 😂❤️
+
+Also, I have a small complaint.
+How can someone be this pretty and still act so casually about it? At least give people a warning! Some of us are not prepared for such unexpected levels of beauty. 🙄😂
+
+Anyway, since you're going home today, I just wanted to say that I hope you have a safe and comfortable journey. Take care of yourself, enjoy your time at home, eat something delicious, get plenty of rest and don't forget to keep that lovely smile of yours.
+
+And yes, don't become too busy to reply to my random nonsense. I have a reputation to maintain as your unofficial entertainment department. 😂
+
+One more thing…
+I hope whenever you remember yesterday, you remember all the laughter, the silly conversations and those little moments that made an ordinary day feel a little more special.
+
+You know what?
+Some people have a beautiful face, some have a beautiful personality, and then there are people who somehow manage to have both.
+I guess you already know which category you belong to. Don't let this compliment get to your head, though. 😂❤️
+
+So, here's wishing you a lovely morning, a beautiful day and a journey filled with good vibes.
+Stay happy, stay pretty, and please keep being your wonderfully annoying self.
+
+And remember, you're allowed to smile while reading this. In fact, that's the whole point. Hehe! ❤️
+
+Have a beautiful day, Monika!
+With lots of smiles, a little teasing, and some extra sweetness,
+Your favourite source of random bakwaas. 😉✨
+
+P.S. If you're blushing right now, please don't blame me. I was just being honest. 😂❤️`;
+
+    let typingIndex = 0;
+    let typingTimer = null;
+    let isTyping = false;
+
+    function openLetter() {
+      playChime('E5');
+
+      confetti({
+        particleCount: 50,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#8a1a24', '#e2a97b', '#fdf4ea', '#3b0b10']
+      });
+
+      const env = document.getElementById('envelope-container');
+      const letter = document.getElementById('letter-card');
+
+      env.classList.add('transition-all', 'duration-500', 'opacity-0', 'scale-90');
+      setTimeout(() => {
+        env.classList.add('hidden');
+        letter.classList.remove('hidden');
+        setTimeout(() => {
+          letter.classList.remove('scale-95', 'opacity-0');
+          letter.classList.add('scale-100', 'opacity-100');
+          startTypewriter();
+        }, 50);
+      }, 400);
+    }
+
+    function startTypewriter() {
+      const box = document.getElementById('typewriter-box');
+      box.innerHTML = '';
+      typingIndex = 0;
+      isTyping = true;
+
+      function typeNextChar() {
+        if (!isTyping) return;
+
+        if (typingIndex < letterContent.length) {
+          const char = letterContent.charAt(typingIndex);
+          box.textContent += char;
+          typingIndex++;
+          box.scrollTop = box.scrollHeight;
+
+          let speed = 20;
+          if (char === '.' || char === '!' || char === '?') speed = 200;
+          else if (char === '\n') speed = 80;
+          else if (char === ',') speed = 60;
+
+          typingTimer = setTimeout(typeNextChar, speed);
+        } else {
+          finishTyping();
+        }
+      }
+      typeNextChar();
+    }
+
+    function skipTyping() {
+      clearTimeout(typingTimer);
+      isTyping = false;
+      const box = document.getElementById('typewriter-box');
+      box.textContent = letterContent;
+      finishTyping();
+    }
+
+    function finishTyping() {
+      isTyping = false;
+      document.getElementById('skip-typing-btn').style.display = 'none';
+
+      // Reveal the Sleeping Teddy Bear section!
+      const teddySec = document.getElementById('teddy-sleeping-container');
+      teddySec.classList.remove('hidden');
+      teddySec.classList.add('flex', 'fade-in');
+
+      // Scroll smoothly down to the teddy
+      setTimeout(() => {
+        teddySec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 200);
+    }
+
+    function smileReaction() {
+      playChime('G5');
+      confetti({
+        particleCount: 45,
+        spread: 80,
+        origin: { y: 0.8 },
+        colors: ['#8c1c27', '#e8ab74', '#fff3e6']
+      });
+    }
+
+    function safeJourneyReaction() {
+      playChime('C6');
+      confetti({
+        particleCount: 50,
+        spread: 90,
+        origin: { y: 0.8 },
+        colors: ['#a32835', '#caa88d', '#fdfbf7']
+      });
+    }
+
+    // Initialize Page 2 on start
+    renderPoem(0);
+  </script>
+</body>
+</html>
